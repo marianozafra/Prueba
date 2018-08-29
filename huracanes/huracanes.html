@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+<meta charset="UTF-8">
+<title>Untitled Document</title>
+<meta name="Author" content=""/>
+<script src="http://cdn1.uvnimg.com/de/8b/bcc0a79549b0a3fd3d8f8df5a8f8/d3.v4.min.js"></script>
+<style>
+</style>
+</head>
+<body>
+
+
+<script type="text/javascript">
+  //Width and height
+  var w = 600;
+  var h = 400;
+  var contador = 0;
+    
+  d3.csv("data/huracanes1900.csv", function(dataset) {
+
+    console.log(dataset[0].total)
+    
+    var arrayHuracanes =[];
+
+    for (i = 0; i < dataset.length; i++){
+        var huracanesTotal = parseInt(dataset[i].totalMH);
+        arrayHuracanes.push(huracanesTotal)    
+    }; 
+    
+    var xScale = d3.scaleBand()
+    .domain(d3.range(dataset.length))
+    .rangeRound([0, w]);
+
+    var yScale = d3.scaleLinear()
+    .domain([0, d3.max(arrayHuracanes)])
+    .range([0, h]);
+
+    //Create SVG element
+    var svg = d3.select("body")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h);
+
+    //Create bars
+    svg.selectAll("rect")
+    .data(arrayHuracanes)
+    .enter()
+    .append("rect")
+    .attr("x", function(d, i) {
+    return i*5;
+    })
+    .attr("y", function(d){
+      return h - (d*30)
+    })
+    .attr("width", 5)
+    .attr("height", function(d){
+      return d *30
+    })
+    .attr("fill", function(d) {
+      var coloreador = Math.round(255 - (d * 36));
+      return "rgb(" + 255 + "," + (coloreador + 15) + "," + coloreador +")";
+      });
+  });
+
+
+
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

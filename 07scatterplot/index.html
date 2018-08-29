@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+	<meta name="Author" content=""/>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400 700" rel="stylesheet">
+    <script src="http://cdn1.uvnimg.com/de/8b/bcc0a79549b0a3fd3d8f8df5a8f8/d3.v4.min.js"></script>
+    <style>
+        #grafico{
+            width:80%;
+            background-color: #ebebe4;   
+        }
+        .textos{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 800;
+            font-style: normal;
+            font-size: 16px;
+        }
+    
+    </style>
+</head>
+<body>
+    <div id="grafico"></div>
+    
+<script>
+var dataset = [
+                [1, 120],
+                [15, 133],
+                [56, 231],
+                [120, 102],
+                [220,188],
+                [475, 167]
+            ];
+var anchoDelGrafico = document.getElementById("grafico").offsetWidth;
+    console.log(grafico)    
+var w = anchoDelGrafico;
+var h = 400;
+    
+var grafico = d3.select("#grafico")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h);
+    
+var circulos = grafico.selectAll("circle")
+    .data(dataset)
+    .enter()
+    .append("circle")
+    .attr("cx", function(d){
+        return w - (d[0] + 30)
+    })
+    .attr("cy", function(d){
+        return d[1]
+    })
+    //FÓRMULA PARA CALCULAR EL ÁREA Y QUE EL AREA DE LOS CÍRCULOS SEA PROPORCIONAL
+    .attr("r", function(d){
+        return Math.sqrt(d[1])//viene explicado en la página 113 del libro de Murray
+    })
+var textos = grafico.selectAll("text")
+    .data(dataset)
+    .enter()
+    .append("text")
+    .text(function(d){
+        return d
+    })
+    .attr("x", function(d){
+        return w - (d[0] + 30) - 20 
+    })
+    .attr("y", function(d){
+        return d[1] - 20 
+    })
+    .classed("textos", true)
+    
+        
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

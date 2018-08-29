@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+	<meta name="Author" content=""/>
+    <script src="http://cdn1.uvnimg.com/de/8b/bcc0a79549b0a3fd3d8f8df5a8f8/d3.v4.min.js"></script>
+    <style>
+        div.barras{
+            display: inline-block;
+            width:25px;
+            height: 50px;
+            background-color: #e33faa;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<script>
+    
+    var dataset=[5,10,15,20,25,30,40,50,23,11,23,32,55,43,22,13,15];
+
+    d3.select("body").selectAll("div")
+        .data(dataset)//IMPORTANTÍIIIIISIMO una vez que se utiliza el método "data", los datos quedan almacenados en memoria. Cualquier función anónima que se cree a partir de ese momento aceptará como parámetro esos datos. Que se invocarán escribiendo una letra, por ejemplo "d"
+        .enter()
+        .append("div")
+        .attr("class", "barras") //También se puede utilizar el método .classed("barras", true). La clase se eliminaría con .classed("barras", false)
+        .style("height", function(d){
+            var alturaBarra = d * 5;
+            return alturaBarra + "px"; 
+    })
+        .text(function(d){
+            return d;
+    })
+</script>
+</body>
+</html>

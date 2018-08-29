@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+	<meta name="Author" content=""/>
+    <script src="http://cdn1.uvnimg.com/de/8b/bcc0a79549b0a3fd3d8f8df5a8f8/d3.v4.min.js"></script>
+    <style>
+        
+        .mapa{
+            fill:#516277;
+            stroke-width: 1px;
+            stroke: #31465E;
+        }
+        .mapa:hover{
+            fill:#da6c6c
+        }
+
+
+    
+    </style>
+</head>
+<body>
+
+    
+    
+
+<script type="text/javascript">
+    var w = 800;
+    var h = 600;
+    
+    var svg = d3.select("body")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h);
+    
+//Se define la proyección
+    var projection = d3.geoAlbersUsa()
+        .translate([w/2, h/2])
+        .scale([900])
+    
+    
+//traslada la longitud y latitud a x e y
+    var path = d3.geoPath()
+        .projection(projection);
+
+
+//carga el mapa    
+    d3.json("us-states.json", function(json){
+            svg.selectAll("path")
+                .data(json.features)
+                .enter()
+                .append("path")
+                .attr("d", path)
+                .classed("mapa", true)
+            });
+
+
+    
+			
+		</script>
+		
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
