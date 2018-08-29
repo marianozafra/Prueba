@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+	<meta name="Author" content=""/>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:200 400 700" rel="stylesheet">
+    <script src="http://cdn1.uvnimg.com/de/8b/bcc0a79549b0a3fd3d8f8df5a8f8/d3.v4.min.js"></script>
+    <style>
+        #grafico{
+            width:80%;
+            border: solid thin #ebebe4;   
+        }
+        .textos{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 15px;
+            fill: #000 !important;
+            text-shadow: 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff;
+
+        }
+        .anos{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 200;
+            font-style: normal;
+            font-size: 13px;
+            fill: #999;
+        }
+        .barras{
+            fill:#2466DA;; 
+        }
+        .linea {
+            stroke: red;
+            stroke-width: 2;
+        }
+        .cajaLinea{
+            fill: red;
+        }
+        .textoLinea{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 15px;
+            fill: #ffffff;
+            text-shadow: 1px 1px 0px #531818, -1px -1px 0px #531818, 1px 1px 0px #531818, -1px -1px 0px #531818, 1px 1px 0px #531818, -1px -1px 0px #531818, 1px 1px 0px #531818, -1px -1px 0px #531818;
+        }
+    
+    </style>
+</head>
+<body>
+<div id="grafico"></div>
+    
+<script>
+
+var anchoDelGrafico = document.getElementById("grafico").offsetWidth;
+    console.log(grafico)    
+    
+var dataset = [2, 23, 44, 55, 65, 66, 66, 77, 87, 33];
+var years = [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000];
+var w = anchoDelGrafico;
+var h = 400;
+var wBarras = 25;
+var padding = 5;
+    
+var yScale = d3.scaleLinear()
+    .domain([0, d3.max(dataset, function(d){return d;})])
+    .range([0, 250]);
+
+var grafico = d3.select("#grafico")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h)
+    
+var barras = grafico.selectAll("rect")
+    .data(dataset)
+    .enter()
+    .append("rect")
+    .classed("barras", true)
+    .attr("width", function(){
+        return w / dataset.length - padding; 
+    })
+    .attr("height", function(d){
+        return yScale(d)
+    })
+    .attr("x", function(d, i){
+        return i * (w / dataset.length)
+    })
+    .attr("y", function(d){
+        return h - yScale(d) - 50
+    })
+  
+var textos = grafico.selectAll("text")
+    .data(dataset)
+    .enter()
+    .append("text")
+    .classed("textos", true)
+    .text(function(d){
+        return d;
+    })
+    .attr("x", function(d, i){
+        return i * (w / dataset.length) + (w / dataset.length - padding)/2
+    })
+    .attr("y", function(d){
+        return h - yScale(d) - 58
+    })
+    .attr("text-anchor" , "middle");
+
+var yearsLeyenda = grafico.selectAll(".anos")
+    .data(years)
+    .enter()
+    .append("text")
+    .classed("anos", true)
+    .text(function(d){
+        return d;
+    })
+    .attr("x", function(d, i){
+        return i * (w / years.length) + (w / years.length - padding)/2
+    })
+    .attr("y", h - 30)
+    .attr("text-anchor" , "middle");    
+    
+var linea = grafico.append("line")
+    .attr("x1", 0)
+    .attr("y1", h - yScale(50) - 50)
+    .attr("x2", w)
+    .attr("y2", h - yScale(50) - 50)
+    .classed("linea", true);
+    
+var cajaLinea = grafico.append("rect")
+    .classed("cajaLinea", true)
+    .attr("x", 0)
+    .attr("y", 182)
+    .attr("width", 150)
+    .attr("height", 25)
+    .attr("rx", 3)
+    .attr("ry", 3);
+
+var textoLinea = grafico.append("text")
+    .text("El valor medio es: 50")
+    .attr("x", 5)
+    .attr("y", h - yScale(50) - 50 - 5)
+    .classed("textoLinea", true)
+
+
+
+
+
+    
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+	<meta name="Author" content=""/>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:200 400 700" rel="stylesheet">
+    <script src="http://cdn1.uvnimg.com/de/8b/bcc0a79549b0a3fd3d8f8df5a8f8/d3.v4.min.js"></script>
+    <style>
+        #grafico{
+            width:80%;
+            border: solid thin #ebebe4;   
+        }
+        .textos{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 12px;
+            fill: #999 !important;
+            text-shadow: 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff;
+
+        }
+        .anos{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 200;
+            font-style: normal;
+            font-size: 13px;
+            fill: #999;
+        }
+        .bolas{
+            fill:#2466DA;; 
+        }
+        .linea {
+            stroke: red;
+            stroke-width: 2;
+        }
+        .cajaLinea{
+            fill: red;
+        }
+        .textoLinea{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 15px;
+            fill: #ffffff;
+            text-shadow: 1px 1px 0px #531818, -1px -1px 0px #531818, 1px 1px 0px #531818, -1px -1px 0px #531818, 1px 1px 0px #531818, -1px -1px 0px #531818, 1px 1px 0px #531818, -1px -1px 0px #531818;
+        }
+    
+    </style>
+</head>
+<body>
+<div id="grafico"></div>
+    
+<script>
+var anchoDelGrafico = document.getElementById("grafico").offsetWidth;    
+var w = anchoDelGrafico;
+var h = 400;
+var dataset, xScale, yScale, aScale;
+var padding = 40;
+
+//Para convertir strings en fechas
+var parseTime = d3.timeParse("%m/%d/%y");
+
+//Para convertir los datos del CSV a Fechas y Números
+var rawConversion = function(d){
+    return {
+        Date : parseTime(d.Date),
+        Amount : parseInt(d.Amount)
+    };
+}
+// Formatea la fecha a string para que se lea en un formato comprensible. Todas las opciones se pueden ver en el repositorio de D3 (https://github.com/d3/d3-time-format#locale_format)
+var formatTime = d3.timeFormat("%e %B");
+
+//Va a cargar los datos del CSV y los va a convertir fechas y números
+d3.csv("data/time_scale_data.csv", rawConversion, function(data){
+    dataset = data;
+    
+    //Create scale functions
+				xScale = d3.scaleTime()
+							   .domain([
+									d3.min(dataset, function(d) { return d.Date; }),
+									d3.max(dataset, function(d) { return d.Date; })
+								])
+							   .range([padding, w - padding]);
+    
+                yScale = d3.scaleLinear()
+							   .domain([
+									d3.min(dataset, function(d) { return d.Amount; }),
+									d3.max(dataset, function(d) { return d.Amount; })
+								])
+							   .range([h - padding, padding]);
+                aScale = d3.scaleSqrt()
+                            .domain([0 , d3.max(dataset,function(d){
+                                return d.Amount
+                            })])
+                            .range([0, 10])
+                            //Pinta el gráfico
+    
+    var grafico = d3.select("#grafico")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h)
+    
+    var bolas = grafico.selectAll("circle")
+        .data(dataset)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d){
+            return xScale(d.Date)
+        })
+        .attr("cy", function(d){
+            return yScale(d.Amount)
+        })
+        .attr("r", function(d){
+            return aScale(d.Amount)
+        })
+        .classed("bolas", true)
+    
+    var textosBolas = grafico.selectAll("text")
+        .data(dataset)
+        .enter()
+        .append("text")
+        .text(function(d){
+            return formatTime(d.Date)
+        })
+        .attr("x", function(d){
+            return xScale(d.Date) + aScale(d.Amount)
+        })
+        .attr("y", function(d){
+            return yScale(d.Amount)
+        })
+        .attr("class", "textos")
+        
+})
+    
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

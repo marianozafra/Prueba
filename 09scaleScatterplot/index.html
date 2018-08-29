@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+	<meta name="Author" content=""/>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400 700" rel="stylesheet">
+    <script src="http://cdn1.uvnimg.com/de/8b/bcc0a79549b0a3fd3d8f8df5a8f8/d3.v4.min.js"></script>
+    <style>
+        #grafico{
+            width:80%;
+            background-color: #ebebe4;   
+        }
+        .textos{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 800;
+            font-style: normal;
+            font-size: 16px;
+        }
+    
+    </style>
+</head>
+<body>
+    <div id="grafico"></div>
+    
+<script>
+var dataset = [
+                [1, 120],
+                [15, 133],
+                [56, 231],
+                [120, 102],
+                [220,188],
+                [475, 167],
+                [600, 150],
+                [100, 600]
+            ];
+var w = 600;
+var h = 500;
+var padding = 20;
+    
+var xScale = d3.scaleLinear()
+    .domain([0 , d3.max(dataset, function(d){
+        return d[0]
+    })])
+    .range([padding, w - padding*2  ])
+var yScale = d3.scaleLinear()
+    .domain([0 , d3.max(dataset,function(d){
+        return d[0]
+    })])
+    .range([h - padding, padding])
+
+//Escala que calcula el area en función del valor
+var aScale = d3.scaleSqrt()
+    .domain([0 , d3.max(dataset,function(d){
+        return d[1]
+    })])
+    .range([0, 10])
+    
+    
+var grafico = d3.select("#grafico")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h);
+    
+var circulos = grafico.selectAll("circle")
+    .data(dataset)
+    .enter()
+    .append("circle")
+    .attr("cx", function(d){
+        return xScale(d[0])
+    })
+    .attr("cy", function(d){
+        return yScale(d[1])
+    })
+    //FÓRMULA PARA CALCULAR EL ÁREA Y QUE EL AREA DE LOS CÍRCULOS SEA PROPORCIONAL
+    .attr("r", function(d){
+        return aScale(d[1])//viene explicado en la página 128 del libro de Murray
+    })
+var textos = grafico.selectAll("text")
+    .data(dataset)
+    .enter()
+    .append("text")
+    .text(function(d){
+        return d
+    })
+    .attr("x", function(d){
+        return xScale(d[0])
+    })
+    .attr("y", function(d){
+        return yScale(d[1])
+    })
+    .classed("textos", true)
+    
+    
+    
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
