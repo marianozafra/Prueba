@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+	<meta name="Author" content=""/>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400 700" rel="stylesheet">
+    <script src="http://cdn1.uvnimg.com/de/8b/bcc0a79549b0a3fd3d8f8df5a8f8/d3.v4.min.js"></script>
+    <style>
+        #grafico{
+            width:80%;
+            background-color: #ebebe4;   
+        }
+        .textos{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 800;
+            font-style: normal;
+            font-size: 16px;
+            color:#408000;
+        }
+    
+    </style>
+</head>
+<body>
+    <div id="grafico"></div>
+    s
+<script>
+    var dataset = [
+                    [1, 120],
+                    [15, 133],
+                    [56, 231],
+                    [120, 102],
+                    [220,188],
+                    [475, 167]
+                ];    
+    var scale = d3.scaleLinear()
+//El dominio recoge el valor menor y mayor de mis datos    
+    .domain([100, 500])    
+//El range (rango) es el valor menor y mayor al que quiero que se adapten mis datos. Gracias a esto se puede controlar cuanto quieres que mida el gráfico. Normalmente el range se suele usar como píxeles de ancho y alto
+    .range([10, 350])
+    
+
+    
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

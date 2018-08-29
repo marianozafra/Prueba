@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled Document</title>
+  <meta name="Author" content=""/>
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto:200 400 700" rel="stylesheet">
+  <script src="http://cdn1.uvnimg.com/de/8b/bcc0a79549b0a3fd3d8f8df5a8f8/d3.v4.min.js"></script>
+  <style>
+  #grafico{
+    width:80%;
+    max-width: 600px;
+    margin: 0 auto; 
+  }
+  .cifras{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    font-style: normal;
+    font-size: 20px;
+    fill: #000 !important;
+    text-shadow: 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff, 1px 1px 0px #ffffff, -1px -1px 0px #ffffff;
+  }
+  .imgCandidatos{
+    width:63px;
+    height: 63px;
+  }
+  .nombreCandidatos{
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 13px;
+    fill:#868688;
+  }
+  .apellidoCandidatos{
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    fill:#868688;
+    text-transform: uppercase;
+  }
+  .axis path {
+    stroke: #ada8a8;
+    shape-rendering: crispEdges;
+  }
+  .axis line {
+    stroke: #ada8a8;
+    shape-rendering: crispEdges;
+  }
+  .axis text {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 11px;
+    fill: #ada8a8;
+  }
+  .estimacion {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 15px;
+    text-align: center;
+    width: auto;
+    margin: 0 auto;
+    ext-transform: uppercase;
+    color: #868688;
+    line-height: 23px;
+  }
+  .fechaEstimacion{
+    color: #2358BF;
+  }
+</style>
+</head>
+<body>
+  <div id="grafico">
+    <p class="estimacion">ESTIMACIÓN DE PREFERENCIA ELECTORAL</p>
+    <p class="estimacion fechaEstimacion">(Mayo 2018)</p>
+  </div>
+
+  <script>
+    var anchoDelGrafico = document.getElementById("grafico").offsetWidth;    
+    var w = anchoDelGrafico;
+    var h = 400;
+    var hBarras = 30;
+    var padding = 10;
+    var margenGrafico= 140;
+    var anchoFoto = 63;
+    var arrayIntVoto =[];
+    var colorCandidato = ['#902327', '#3677FA', '#F82A35', '#00CDCD', '#818181'];
+    var mes = 'mayo';
+
+    var grafico = d3.select("#grafico")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h);
+
+
+    d3.csv("data/intencionVoto.csv", function(intVoto){  
+      for (i = 0; i < intVoto.length; i++){
+        var votos = parseFloat(intVoto[i][mes]);
+        arrayIntVoto.push(votos)    
+      }; 
+
+  //Escalas
+  var xScale = d3.scaleLinear()
+  .domain([0, d3.max(arrayIntVoto, function(d){return d;})])
+  //.domain([0, d3.max(arrayIntVoto, function(d){return d;})])
+  .range([0, w - margenGrafico]);
+
+  var xAxis = d3.axisBottom()
+    .scale(xScale)
+    .ticks(5);//ticks son las barritas de la escala     
+
+  //Pinta las BARRAS    
+  var barras = grafico.selectAll("rect")
+    .data(intVoto)
+    .enter()
+    .append("rect")
+    .classed("barras", true)
+    .attr("width", function(d){
+      return xScale(d[mes]);})
+    .attr("height", hBarras)
+    .attr("x", anchoFoto)
+    .attr("y", function(d,i){
+      return i * anchoFoto + i * padding + 33})
+    .attr("fill", function(d,i){
+      return colorCandidato[i]});
+
+  //Pinta las cifras
+  var cifras = grafico.selectAll("text")
+    .data(intVoto)
+    .enter()
+    .append("text")
+    .classed("cifras", true)
+    .text(function(d){
+      return d[mes] + '%';})
+    .attr("x", function(d){
+      return xScale(d[mes]) + padding + anchoFoto;})
+    .attr("y", function(d,i){
+      return i * anchoFoto + i * padding + hBarras/2 +38;});
+
+  //Meter fotos
+  var fotos = grafico.selectAll(".imgCandidatos")
+    .data(intVoto)
+    .enter()
+    .append('svg:image')
+    .classed("imgCandidatos", true)
+    .attr("xlink:href", function(d){
+      return 'https://www.univisionbeta.net/infografia/img/eleccionesMexico/img/' + d.foto + '.png';})
+    .attr("x", 0)
+    .attr("y", function(d,i){
+      return i * anchoFoto + i * padding;});
+
+  //Meter nombre de candidatos
+  var nombres = grafico.selectAll(".nombreCandidatos")
+    .data(intVoto)
+    .enter()
+    .append("text")
+    .classed("nombreCandidatos", true)
+    .text(function(d){
+      return d.nombre;})
+    .attr("x", anchoFoto + 5)
+    .attr("y", function(d,i){
+      return i * anchoFoto + i * padding + 12});    
+
+  //Meter apellido de candidatos
+  var apellidos = grafico.selectAll(".apellidoCandidatos")
+    .data(intVoto)
+    .enter()
+    .append("text")
+    .classed("apellidoCandidatos", true)
+    .text(function(d){
+      return d.apellido;})
+    .attr("x", anchoFoto + 5)
+    .attr("y", function(d,i){
+      return i * anchoFoto + i * padding + 27});
+
+  //Mete el axis X
+  var ejeX = grafico.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(" + anchoFoto + "," +  (h - 40) + ")")
+    .call(xAxis);
+})
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

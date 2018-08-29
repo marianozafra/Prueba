@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+	<meta name="Author" content=""/>
+    <script src="http://cdn1.uvnimg.com/de/8b/bcc0a79549b0a3fd3d8f8df5a8f8/d3.v4.min.js"></script>
+     <style>
+         *{
+             padding: 0;
+             margin: 0;
+             
+         }
+        #grafico{
+            width: 80%;
+            background-color: #eaeaea;
+            padding: 0;
+
+        }
+         .textos{
+             font-size: 12px;
+             text-align: center;
+         }
+    </style>
+</head>
+<body>
+    <p id="boton">Texto para cambiar</p>   
+    <div id="grafico"></div>
+   
+<script>
+    var anchoGrafico = document.getElementById("grafico").offsetWidth;
+
+    
+    var w = anchoGrafico;
+    var h = 300;
+    var padding = 30;
+    var yScale;
+    var XScale;
+    
+    //Bucle para conseguir un dataset random
+    var datosRandom = []
+    for(i = 0; i < 50 ; i++){
+        datosRandom.push(Math.floor(Math.random() * 100))
+    }
+    var dataset = datosRandom;
+    
+    
+    function calcularEscalaY(e){
+         yScale = d3.scaleLinear()
+			.domain([0, d3.max(e)])
+			.range([0, h - padding]);
+    };
+    function calcularEscalaX(r){
+        xScale = d3.scaleBand()
+			.domain(d3.range(r.length))
+			.rangeRound([0, w])
+			.paddingInner(0.05);
+    };
+  
+    calcularEscalaX(dataset);
+    calcularEscalaY(dataset);
+    
+//Create SVG element
+			var grafico = d3.select("#grafico")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+			//Create bars
+			grafico.selectAll("rect")
+			   .data(dataset)
+			   .enter()
+			   .append("rect")
+			   .attr("x", function(d, i) {
+			   		return xScale(i);
+			   })
+			   .attr("y", function(d) {
+			   		return h - yScale(d);
+			   })
+			   .attr("width", xScale.bandwidth())
+			   .attr("height", function(d) {
+			   		return yScale(d);
+			   })
+			   .attr("fill", "blue");
+    
+            var textos = grafico.selectAll("text")
+                .data(dataset)
+                .enter()
+                .append("text")
+                .text(function(d){
+                    return d
+                })
+                .attr("text-anchor", "middle")
+			   .attr("x", function(d, i) {
+			   		return xScale(i) + xScale.bandwidth() / 2;
+			   })
+			   .attr("y", function(d) {
+			   		return h - yScale(d) - 5;
+			   })
+			   .attr("font-family", "sans-serif")
+			   .attr("font-size", "11px")
+    
+   
+    d3.selectAll("#boton")
+            .on("click", function(){
+                 //Bucle para conseguir un dataset random
+                var numeroDeValoresDelArray = dataset.length;
+                dataset = [];
+                for(i = 0; i < numeroDeValoresDelArray ; i++){
+                    dataset.push(Math.floor(Math.random() * 50))
+                }
+                    calcularEscalaX(dataset);
+                    calcularEscalaY(dataset);
+        
+                    grafico.selectAll("rect")
+                        .data(dataset)
+                        .transition()
+                        .delay(function(d, i){
+                               return (100 * i)/dataset.length;
+                               })
+                        .duration(500)
+                        .ease(d3.easeLinear)
+                        .attr("y", function(d) {
+                            return h - yScale(d);
+                       })
+                       .attr("height", function(d) {
+                            return yScale(d);
+                       })
+                    
+                    grafico.selectAll("text")
+                        .data(dataset)
+                         .transition()
+                        .delay(function(d, i){
+                               return (100 * i)/dataset.length;
+                               })
+                        .duration(500)
+                        .ease(d3.easeLinear)
+                        .text(function(d){
+                            return d
+                        })
+                        .attr("text-anchor", "middle")
+                       .attr("x", function(d, i) {
+                            return xScale(i) + xScale.bandwidth() / 2;
+                       })
+                       .attr("y", function(d) {
+                            return h - yScale(d) - 5;
+                       })
+   
+            })
+    
+    
+                 
+</script>
+
+
+</body>
+</html>

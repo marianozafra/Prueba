@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+	<meta name="Author" content=""/>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400 700" rel="stylesheet">
+    <script src="http://cdn1.uvnimg.com/de/8b/bcc0a79549b0a3fd3d8f8df5a8f8/d3.v4.min.js"></script>
+    <style>
+       .barras{
+            fill: #2466DA;
+        }
+        .textoBarras{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 800;
+            font-style: normal;
+            font-size: 16px;
+        }
+        .textoYears{
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            font-size: 13px;
+            fill:#aaa5a5;
+        }
+        #grafico{
+            width:80%;
+            background-color: #ebebe4;   
+        }
+    </style>
+</head>
+<body>
+
+    
+    <div id="grafico"></div>
+    
+    <script>
+    var anchoDelGrafico = document.getElementById("grafico").offsetWidth;
+    console.log(grafico)
+    
+    var w = anchoDelGrafico;
+    var h = 300;
+    var hLeyenda = 20;
+    var barPadding = 10;
+    var dataset = [3,5,7,2,55,33,6,12,34,6,55,44,33,3,3,3,3,3,3,3,];
+    var years = [96,97,98,99,00,01,02,03,04,05,06,07,08,08,08,08,08,08,08,08];
+    
+    
+    //Bucle para conseguir un dataset random
+    var datosRandom = []
+    for(i = 0; i < 40 ; i++){
+        datosRandom.push(Math.floor(Math.random() * 50))
+    }
+    
+    var svg = d3.select("#grafico")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h);
+        
+    var leyenda = d3.select("#grafico")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", hLeyenda);    
+
+    var barras = svg.selectAll("rect")
+        .data(dataset)
+        .enter()
+        .append("rect")
+        .attr("width", function(d){
+            return w/dataset.length - barPadding
+        })
+        .attr("height", function(d){
+            return d*3
+        })
+        .attr("x", function(d,i){
+            return i * (w/dataset.length)
+        })
+        .attr("y", function(d){
+            return h - d*3
+        })
+        .classed("barras" , true)
+    ;
+    
+    var textos = svg.selectAll("text")
+        .data(dataset)
+        .enter()
+        .append("text")
+        .text(function(d){
+            return d
+        })
+        .attr("x", function(d,i){//para que se posicione en el centro automáticamente he cogido la posición x de las barras y le he sumado la mitad del ancho de las barras. Ambos se calculan dividiendo el ancho del svg entre el numero de elementos del array
+            return i * (w/dataset.length) + (w/dataset.length - barPadding)/2})
+        .attr("y", function(d){
+            return (h - d*3) - 10
+        })
+        .classed("textoBarras" , true)
+        .attr("text-anchor" , "middle");//text-anchor es un atributo de SVG para alinear el texto del svg. Puede ser start, middle o end
+        
+    var textos2 = leyenda.selectAll("text")
+        .data(years)
+        .enter()
+        .append("text")
+        .text(function(d){
+            return d
+        })
+        .attr("x", function(d,i){//para que se posicione en el centro automáticamente he cogido la posición x de las barras y le he sumado la mitad del ancho de las barras. Ambos se calculan dividiendo el ancho del svg entre el numero de elementos del array
+            return i * (w/dataset.length) + (w/dataset.length - barPadding)/2})
+        .attr("y", 17)
+        .classed("textoYears" , true)
+        .attr("text-anchor" , "middle");//text-anchor es un atributo de SVG para alinear el texto del svg. Puede ser start, middle o end    
+    
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+	<meta name="Author" content=""/>
+    <script src="http://cdn1.uvnimg.com/de/8b/bcc0a79549b0a3fd3d8f8df5a8f8/d3.v4.min.js"></script>
+</head>
+<body>
+<script>
+    
+    var dataset=[5,10,15,20,25];
+
+    d3.select("body").selectAll("p")
+        .data(dataset)//IMPORTANTÍIIIIISIMO una vez que se utiliza el método "data", los datos quedan almacenados en memoria. Cualquier función anónima que se cree a partir de ese momento aceptará como parámetro esos datos. Que se invocarán escribiendo una letra, por ejemplo "d"
+        .enter()
+        .append("p")
+        .text(function(d){
+            console.log(d)
+            return "Hola número " + d;
+    })
+        .style("color", function(d){
+              if(d < 15){
+                return "red";
+            }else{
+                return "blue";
+            }}
+              );
+</script>
+</body>
+</html>

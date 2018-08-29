@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <meta charset="UTF-8">
+  <title>Untitled Document</title>
+  <meta name="Author" content=""/>
+
+ <!--  <link href="https://fonts.googleapis.com/css?family=Roboto:200 400 700" rel="stylesheet"> -->
+  <script src="http://cdn1.uvnimg.com/de/8b/bcc0a79549b0a3fd3d8f8df5a8f8/d3.v4.min.js"></script>
+<style>
+#grafico{
+  width:80%;
+  max-width: 600px;
+  margin: 0 auto; 
+}
+.linea{
+  stroke: #ada8a8;
+  stroke-width: 10;
+}
+
+
+</style>
+</head>
+<body>
+  <div id="grafico">
+    <p class="estimacion">ESTIMACIÓN DE PREFERENCIA ELECTORAL</p>
+    <div id="contenedor-grafico"></div>
+  </div>
+
+  <script>
+    var anchoDelGrafico = document.getElementById("grafico").offsetWidth;    
+    var w = anchoDelGrafico;
+    var h = 400;
+    var padding = 10;
+    var margenGrafico= 140;
+    var arrayVotosMaximos = [];
+    var colorCandidato = ['#902327', '#3677FA', '#F82A35', '#00CDCD', '#818181'];
+    var meses = ['noviembre', 'diciembre', 'enero', 'febrero', 'marzo', 'abril', 'mayo'];
+
+    var grafico = d3.select("#contenedor-grafico")
+      .append("svg")
+      .attr("width", w)
+      .attr("height", h);
+
+
+    d3.csv("data/evolucionVoto.csv", function(intVoto){  
+
+      // Se rellena el array con los votos máximos
+      for (i = 0; i < intVoto.length; i++){
+        var votosMax = parseFloat(intVoto[i]['max']);
+        arrayVotosMaximos.push(votosMax)    
+      }; 
+
+      //Escalas
+      var xScale = d3.scaleBand()
+              .domain(d3.range(meses.length))
+              .rangeRound([0, w]);
+              console.log(d3.range(meses.length));
+
+      var yScale = d3.scaleLinear()
+        .domain([0, d3.max(arrayVotosMaximos)])
+        .range([h, 0]);
+
+      //Función D3 que crea la línea
+      var line = d3.line()
+        .x(function(d) {return xScale(meses)})
+        .y(function(d) {return yScale(d.porcentaje)});
+
+
+      // Crear la línea
+        grafico.append("path")
+        .datum(intVoto)
+        .classed("linea", true)
+        .attr("d", line);
+
+
+
+
+
+
+
+
+
+
+
+  })
+
+
+ 
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
