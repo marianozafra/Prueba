@@ -1,0 +1,48 @@
+#chart-area svg {
+	margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+#logo {
+	height:50px;
+}
+
+.navbar-brand {
+	height: 60px;
+	padding: 5px 0px;
+}
+
+#chart-area{
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.barras_starbucks{
+    fill: #579765;
+}
+
+.leyenda{
+   text-anchor: middle;
+   font-size: 2rem; 
+}
+.cifras{
+   text-anchor: middle;
+   font-size: 1.5rem; 
+}
+
+.axis path {
+    stroke: #ada8a8;
+    shape-rendering: crispEdges;
+  }
+.axis line {
+stroke: #ada8a8;
+shape-rendering: crispEdges;
+}
+.axis text {
+font-family: 'Roboto', sans-serif;
+font-weight: 400;
+font-style: normal;
+font-size: 1.3rem;
+fill: #ada8a8;
+}
